@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require("fs");
 const dbJSON = require("./db.json");
 const path = require("path");
+const { Script } = require("vm");
 
 // Sets up the Express App
 // =============================================================
@@ -14,7 +15,8 @@ const PORT = process.env.PORT || 3000;
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use('/notes.html',express.static('../public/assets/css/styles.css'));
+app.use('/notes.html',express.static(path.join(__dirname + '../public/assets/js/index.js')));
 
 
 // Routes
@@ -23,14 +25,21 @@ app.use(express.json());
 // Basic route that sends the user first to the AJAX Page
 
 app.get("/", function(req, res) {
-  res.send("Proof of concept of storing data");
+  res.sendFile(path.join(__dirname, "../public/index.html"))
+  // app.use(express.static(path.join(__dirname, '../public')))
 });
 
-app.get("/note", function(req, res) {
+app.get("/notes.html", function(req, res) {
+  // res.send("Proof of concept of storing data");
+  res.sendFile(path.join(__dirname, "../public/notes.html"))
+
+});
+
+app.get("/api/notes", function(req, res) {
   res.json(dbJSON);
 });
 
-app.post("/note", function(req, res) {
+app.post("/api/notes", function(req, res) {
   // Validate request body
   if(!req.body.title) {
     return res.json({error: "Missing required title"});
@@ -54,6 +63,13 @@ app.post("/note", function(req, res) {
   });
 });
 
+app.delete("/api/notes", function(req, res){
+
+  const note = {...req.body, id: uuidv4()}
+  dbJSON.delete(note);
+
+})
+
 app.get("*", function(req, res) {
   res.send("Sending you the homepage");
 });
@@ -63,3 +79,4 @@ app.get("*", function(req, res) {
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
+
