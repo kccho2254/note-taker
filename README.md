@@ -1,8 +1,4 @@
 # note-taker
-
-Make your own RESTful API!
-https://youtu.be/l8WPWK9mS5M
-
 ## Description
 
 ### [Deployed to Heroku](https://note-taker-5561109.herokuapp.com/)
@@ -40,6 +36,10 @@ After that, navigate to a web browser and type:
 ## Contributing
 Feel free to reach out or request pulls from github. My classmates and class instructor Calvin are also to thank for helping me learn.
 
+
+
+Make your own RESTful API!
+https://youtu.be/l8WPWK9mS5M
 ## License
 © Kevin C Cho
 
