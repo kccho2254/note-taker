@@ -15,8 +15,7 @@ const PORT = process.env.PORT || 3000;
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/notes.html',express.static('../public/assets/css/styles.css'));
-app.use('/notes.html',express.static(path.join(__dirname + '../public/assets/js/index.js')));
+app.use(express.static('public'));
 
 
 // Routes
@@ -25,14 +24,11 @@ app.use('/notes.html',express.static(path.join(__dirname + '../public/assets/js/
 // Basic route that sends the user first to the AJAX Page
 
 app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "../public/index.html"))
-  // app.use(express.static(path.join(__dirname, '../public')))
+  res.sendFile(path.join(__dirname, "public/index.html"))
 });
 
-app.get("/notes.html", function(req, res) {
-  // res.send("Proof of concept of storing data");
-  res.sendFile(path.join(__dirname, "../public/notes.html"))
-
+app.get("/notes", function(req, res) {
+  res.sendFile(path.join(__dirname, "public/notes.html"))
 });
 
 app.get("/api/notes", function(req, res) {
