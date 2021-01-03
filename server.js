@@ -44,6 +44,8 @@ app.post("/api/notes", function(req, res) {
   // Copy request body and generate ID
   const note = {...req.body, id: uuidv4()}
 
+  console.log(req.body);
+
   // Push note to dbJSON array - saves data in memory
   dbJSON.push(note);
 
@@ -57,8 +59,19 @@ app.post("/api/notes", function(req, res) {
 
     return res.json(note);
   });
+
+  console.log(req.params);
+
 });
 
+app.get('/api/notes/:id', (req, res) => {
+  const {id} = req.params;
+
+  const foundNote = dbJSON.find((notes) => notes.id === id);
+
+  res.send(foundNote);
+
+})
 app.delete("/api/notes", function(req, res){
 
   const note = {...req.body, id: uuidv4()}
