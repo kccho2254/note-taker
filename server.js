@@ -3,7 +3,7 @@
 const express = require("express");
 const { v4: uuidv4 } = require('uuid');
 const fs = require("fs");
-const dbJSON = require("./db.json");
+let dbJSON = require("./db.json");
 const path = require("path");
 const { Script } = require("vm");
 
@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
+
 
 
 // Routes
@@ -72,12 +73,16 @@ app.get('/api/notes/:id', (req, res) => {
   res.send(foundNote);
 
 })
-app.delete("/api/notes", function(req, res){
 
-  const note = {...req.body, id: uuidv4()}
-  dbJSON.delete(note);
+app.delete('/api/notes/:id', (req, res) => {
+  const {id} = req.params;
 
+  dbJSON = dbJSON.filter((notes) => notes.id !== id);
+
+  res.send(`User with the id ${id} deleted from database.`);
 })
+
+
 
 app.get("*", function(req, res) {
   res.send("Sending you the homepage");
