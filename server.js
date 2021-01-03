@@ -24,26 +24,26 @@ app.use(express.static('public'));
 
 // Basic route that sends the user first to the AJAX Page
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "public/index.html"))
 });
 
-app.get("/notes", function(req, res) {
+app.get("/notes", function (req, res) {
   res.sendFile(path.join(__dirname, "public/notes.html"))
 });
 
-app.get("/api/notes", function(req, res) {
+app.get("/api/notes", function (req, res) {
   res.json(dbJSON);
 });
 
-app.post("/api/notes", function(req, res) {
+app.post("/api/notes", function (req, res) {
   // Validate request body
-  if(!req.body.title) {
-    return res.json({error: "Missing required title"});
+  if (!req.body.title) {
+    return res.json({ error: "Missing required title" });
   }
 
   // Copy request body and generate ID
-  const note = {...req.body, id: uuidv4()}
+  const note = { ...req.body, id: uuidv4() }
 
   console.log(req.body);
 
@@ -55,18 +55,15 @@ app.post("/api/notes", function(req, res) {
   // Saving to file allows us to read previous notes (before server was shutdown) from file.
   fs.writeFile(path.join(__dirname, "db.json"), JSON.stringify(dbJSON), (err) => {
     if (err) {
-      return res.json({error: "Error writing to file"});
+      return res.json({ error: "Error writing to file" });
     }
 
     return res.json(note);
   });
-
-  console.log(req.params);
-
 });
 
 app.get('/api/notes/:id', (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
   const foundNote = dbJSON.find((notes) => notes.id === id);
 
@@ -75,22 +72,23 @@ app.get('/api/notes/:id', (req, res) => {
 })
 
 app.delete('/api/notes/:id', (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
   dbJSON = dbJSON.filter((notes) => notes.id !== id);
 
-  res.send(`User with the id ${id} deleted from database.`);
+  fs.writeFile('db.json', JSON.stringify(dbJSON), function () { console.log(`User ${id} deleted from file`) })
+
+  res.send();
 })
 
 
-
-app.get("*", function(req, res) {
+app.get("*", function (req, res) {
   res.send("Sending you the homepage");
 });
 
 // Starts the server to begin listening
 // =============================================================
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log("App listening on PORT " + PORT);
 });
 
