@@ -7,6 +7,7 @@
 
 This is an app that allows the user to write and save notes, powered by Node and Express server. Saved notes will list to the left-hand side and will be stored in a JSON API with their own uuidv4 generated authentication ID (which for demonstrative purposes are accesible through the URL route /api/notes). 
 
+To be able to save your own notes, you must clone this repo and run it from http://localhost:3000.
 ## Installation
 
 Dependencies needed for installation:
